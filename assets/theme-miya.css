@@ -175,3 +175,8 @@
 
 /* 8. ヒーロー見出し：375pxで9文字しか入らず5行に割れていた */
 .hero-copy h1{font-size:28px;letter-spacing:.04em;line-height:1.72}
+
+/* 表示速度の改善（2026-10-08）: 本文ゴシックのWebフォント読み込みを廃止。
+   Hiragino Sans（iOS/Mac標準）で視覚的な差はほぼ無く、約1MB削減できる。
+   見出しの明朝（Shippori Mincho B1）は世界観の核なので維持する。 */
+:root{--sans:"Hiragino Sans","Hiragino Kaku Gothic ProN","Yu Gothic Medium","Yu Gothic",system-ui,sans-serif}
