@@ -1,0 +1,177 @@
+/* =====================================================================
+   theme-miya.css  みや（スピ系・潜在意識の翻訳家）本鑑定LP用テーマ
+   読み込み順： lp.css → theme-miya.css
+   世界観： 洗練された部屋・白・木・花。明るい背景（ウォームホワイト × くすみピンクベージュ × セージ × 控えめなゴールド）
+
+   方針
+   1) 変更の本体は :root のトークン上書き（下の1ブロック）
+   2) lp.css は「暗い背景」前提で #fff や淡い金をベタ書きしている箇所がある。
+      そこは明るい背景で読めなくなるため、下の「コントラスト補正」で
+      【色・背景色・影の色だけ】を上書きする。
+      寸法・配置・display・position・padding・margin・フォントサイズ等の構造系は一切触らない。
+   3) 構造セレクタ（.item>* 等）は上書きしない
+   ===================================================================== */
+
+:root{
+  color-scheme:light;
+
+  /* ---- 背景（明）---- */
+  --bg:#FCFAF6;          /* ウォームホワイト（本文背景） */
+  --bg2:#F5EDE6;         /* くすみピンクベージュ（セクション上端） */
+  --bg3:#F9F3EE;
+
+  /* ---- ゴールド系トークンの役割を「明るい背景用」に再定義 ----
+     --gold    : 罫線・章番号・小見出し（深めのくすみ金）  対 #FCFAF6 = 6.1:1 / 対 #F5EDE6 = 5.0:1
+     --gold-hi : 強調文字（ew・quote・商品名・サブコピー）→ 深いセージ  対 #FCFAF6 = 6.1:1
+     --gold-lo : 進捗バー等の淡いセージ                                              */
+  --gold:#7C6032;
+  --gold-hi:#4F6648;
+  --gold-lo:#9DB096;
+
+  /* ---- 文字 ---- */
+  --paper:#3A3330;       /* 本文（あたたかい墨色） 対 #FCFAF6 = 11.7:1 */
+  --mute:#6C625D;        /* 囁き・注釈               対 #F5EDE6 = 5.1:1 */
+  --shu:#AE4B38;         /* 強調（strong）・痛みの言葉 テラコッタ 対 #F5EDE6 = 4.6:1 */
+  --marker:rgba(222,176,166,.45);   /* マーカーはピンクベージュ */
+
+  /* ---- 明セクション（.s-light）＝セージ薄 ---- */
+  --cream:#EEF2EA;
+  --ink:#2F3631;
+  --ink2:#59615B;        /* 対 #EEF2EA = 5.4:1 */
+  --kon:#3D5639;         /* 明セクションの見出し・ボタン文字（深いセージ） */
+  --rose:#A24B60;        /* くすみローズ 対 #EEF2EA = 5.0:1 */
+  --wis:#7A6842;
+
+  /* ---- CTA：控えめなゴールド＋濃い茶文字（全域 5:1 以上）---- */
+  --cta-a:#B8923F; --cta-b:#E2C57F; --cta-c:#F8EBC6; --cta-d:#A98238;
+  --cta-ink:#2A1F0A;
+}
+
+/* =====================================================================
+   コントラスト補正（色のみ）
+   lp.css がダーク前提でベタ書きしている #fff / 淡い金 / 半透明の黒 を、明るい背景用に置換
+   ===================================================================== */
+
+/* ヒーロー */
+.hero-copy .tag{background:rgba(255,255,255,.74);border-color:rgba(124,96,50,.45)}
+
+/* 金の箔文字・グラデ数字：淡い金は白地で消えるため、深い金のグラデに */
+.gg,
+.big .g,
+.peak .l2 em{
+  background-image:linear-gradient(115deg,#8F6E2E 0%,#6B5224 30%,#A3823B 52%,#7C6030 75%,#8F6E2E 100%);
+}
+.num-gold,
+.stat .num,
+.vs .r.pr .c:last-child .v,
+.pricepeek .it .v,
+.sticky .pricebox .p{
+  background-image:linear-gradient(180deg,#A3823B 0%,#7C6030 55%,#6B5224 100%);
+}
+.num-gold{filter:none}
+.capsule{color:#fff}
+
+/* 写真上の文字は白＋既存の黒い影 */
+.ph-full .ov,
+.ph .cap{color:#fff}
+
+/* 比較表 */
+.vs .r.hd .c{background:rgba(124,96,50,.07)}
+
+/* 商品カード：白地のカード */
+.item,.plan{background:linear-gradient(180deg,#FFFFFF,#FBF7F2);border-color:rgba(124,96,50,.28)}
+.item.rec,.plan.rec{background:linear-gradient(180deg,#FFF8E6,#FFFFFF);border-color:#B8923F}
+.badge{background:linear-gradient(100deg,#3F5639,#5C7654 50%,#3F5639);color:#fff}
+.pr-stage .off{background:linear-gradient(100deg,#E7CC85,#F7E8BC 50%,#DDBE78)}
+
+/* 限定料金ボックス・カウントダウン */
+.limbox{background:linear-gradient(180deg,rgba(174,75,56,.07),rgba(255,255,255,.6));border-color:rgba(174,75,56,.5)}
+.cd .u b{color:var(--paper);text-shadow:none}
+.cd .u.s b{color:var(--shu)}
+.cd .sep{color:rgba(174,75,56,.75)}
+
+/* 混雑帯・残枠バー */
+.crowd{background:rgba(124,96,50,.06)}
+.crowd.hot{background:linear-gradient(180deg,rgba(174,75,56,.08),rgba(255,255,255,.6))}
+.crowd .ct{color:var(--paper)}
+.stock .sl b{color:var(--shu)}
+.stock .bar{background:rgba(58,51,48,.08)}
+
+/* LINE相談ボックス */
+.linebox{background:linear-gradient(180deg,rgba(124,96,50,.07),rgba(255,255,255,.6))}
+
+/* 注意書き（来ないでほしい方）：淡いサーモン文字は白地で読めないため */
+.warn{background:linear-gradient(180deg,rgba(174,75,56,.07),rgba(174,75,56,.02))}
+.warn h3,
+.warn .eyebrow{color:#A3402E}
+
+/* FAQ：回答文の薄いグレー（#D8D3CA）は白地で消えるため */
+.faq .ans{color:#4F4642}
+
+/* 追従バー */
+.sticky .lab .hot{color:var(--shu)}
+.sticky .lab .cdmini{color:var(--paper)}
+
+/* =====================================================================
+   PDCA改善 v2（2026-10-08）あまね比較の実測診断にもとづく
+   数値はすべてWCAG比で検算済み。構造セレクタは触らない。
+   ===================================================================== */
+
+/* 1. 本文中CTA：薄い金のピルが背景に溶けていた（1.14〜3.39:1）
+      → くすみテラコッタの濃色へ。輪郭7.23:1 / 白文字7.54:1 */
+.cta .btn{
+  background:linear-gradient(135deg,#8E3A28 0%,#B05437 48%,#8E3A28 100%);
+  background-size:200% 100%;
+  color:#FFF6EE;text-shadow:none;
+  box-shadow:0 14px 32px rgba(142,58,40,.28),inset 0 0 0 1px rgba(255,246,238,.4);
+}
+.cta .btn::after{background:linear-gradient(100deg,transparent,rgba(255,255,255,.26),transparent)}
+.cta .sub{color:#8E3A28}
+
+/* 弱CTA・購入ボタン：枠線が1.55:1で見えなかった → 5.63:1へ */
+.minicta{border:1px solid #7C6032;background:#fff;color:#5A4426;box-shadow:0 2px 10px rgba(124,96,50,.08)}
+.minicta .s{color:#6C625D}
+.pbtn{border:1px solid #7C6032;background:#fff;color:#5A4426}
+.rec .pbtn{
+  background:linear-gradient(135deg,#8E3A28,#B05437 48%,#8E3A28);
+  color:#FFF6EE;border-color:#8E3A28;
+  box-shadow:0 10px 24px rgba(142,58,40,.26),inset 0 0 0 1px rgba(255,246,238,.45);
+}
+.sticky .row a{background:linear-gradient(135deg,#8E3A28,#B05437 48%,#8E3A28);color:#FFF6EE}
+
+/* 2. 「3日間限定」ラベル：lp.cssの朱グラデのまま白文字2.66:1だった → 6.89:1 */
+.limbox .lt{
+  background:linear-gradient(100deg,#9C3A28,#B5432E 50%,#9C3A28);
+  color:#fff;box-shadow:0 4px 14px rgba(156,58,40,.3);
+}
+
+/* 3. 章番号：11px・3.43:1で読めなかった → 12px・5.07:1 */
+.chapno{font-size:12px;opacity:1;color:#7C6032;letter-spacing:.42em}
+
+/* 4. 深さ図の無料層：opacity .8 で3.61:1まで落ちていた → 不透明に */
+.depth .layer.free{opacity:1}
+.depth .layer.free .nm{color:#5A5048}
+.depth .layer.free .sub{color:#6C625D}
+
+/* 5. 罫線・枠線が1.11〜1.49:1で消えていた → 見える濃度へ */
+.chk li{border-bottom-color:rgba(124,96,50,.3)}
+.item,.plan{border-color:rgba(124,96,50,.5)}
+.vs{border-color:rgba(124,96,50,.5)}
+.vs .r{border-bottom-color:rgba(124,96,50,.22)}
+
+/* 6. 背景の起伏：全セクション1.09:1でのっぺりしていた → 段差をつける */
+:root{--bg2:#EDE1D5;--bg3:#F4ECE0}
+.s-ai{background:linear-gradient(180deg,#F2E9DC 0%,var(--bg) 100%)}
+.s-ai-r{background:linear-gradient(180deg,var(--bg) 0%,#EFE5D7 100%)}
+.s-dark{background:#F7F2E9}
+
+/* 7. 特典ボックス：lp.cssの黒ウォッシュが灰色く濁っていた */
+.bonus{background:linear-gradient(180deg,#FFFBEF,#fff);border-color:#B8923F;box-shadow:0 10px 30px rgba(124,96,50,.1)}
+.bonus .bt{background:#8E3A28;color:#fff}
+.bonus .bfree{background-image:linear-gradient(180deg,#A3823B,#7C6030 60%,#6B5224)}
+.bonus .bw,.bonus .bn{color:#6C625D}
+.bonus .bw s{color:#3A3330}
+.bonus .bh{color:#5A4426}
+
+/* 8. ヒーロー見出し：375pxで9文字しか入らず5行に割れていた */
+.hero-copy h1{font-size:28px;letter-spacing:.04em;line-height:1.72}
