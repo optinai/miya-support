@@ -107,7 +107,13 @@
     var hours = parseFloat(document.body.getAttribute('data-deadline-hours')||'72');
     var sk = 'lp_deadline_'+key, dl = 0;
     try{ dl = parseInt(localStorage.getItem(sk)||'0',10); }catch(e){}
-    if(!dl || isNaN(dl)){ dl = Date.now() + hours*3600*1000; try{ localStorage.setItem(sk, String(dl)); }catch(e){} }
+    /* 2026-10-09 修正: 期限切れの古い値が残っていると二度とカウントダウンが出ない問題に対処。
+       保存済みの期限が「現在より過去」または「想定より未来すぎる」場合も再設定する。 */
+    var now = Date.now(), maxAhead = now + hours*3600*1000 + 60000;
+    if(!dl || isNaN(dl) || dl <= now || dl > maxAhead){
+      dl = now + hours*3600*1000;
+      try{ localStorage.setItem(sk, String(dl)); }catch(e){}
+    }
     var cds = document.querySelectorAll('.cd'), exs = document.querySelectorAll('.cd-expired'), minis = document.querySelectorAll('.cdmini');
     function pad(n){ return (n<10?'0':'')+n; }
     function tick(){
