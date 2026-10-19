@@ -97,19 +97,30 @@
     });
   }
 
-  /* ---- 6.5 3日間限定カウントダウン ----
-     <body data-deadline-key="mizuki_kantei" data-deadline-hours="72">
-     初回閲覧時刻を localStorage に保存し、そこから N 時間を締切にする（無料鑑定受取→LP初見を起点とみなす）。
-     表示先: .cd 内の [data-d] [data-h] [data-m] ／ 期限後は .cd を隠し .cd-expired を出す ／ .cdmini に「2日13時間」 */
+  /* ---- 6.5 限定カウントダウン ----
+     data-deadline-days 指定ページは天華と同じ、初回閲覧日のN日後の24時まで。
+     指定のない既存ページの時間制仕様は維持する。 */
   (function(){
     var key = document.body.getAttribute('data-deadline-key');
     if(!key) return;
-    var hours = parseFloat(document.body.getAttribute('data-deadline-hours')||'72');
-    /* 2026-10-09 仕様変更: ページを開くたびに期限をリセットする。
-       localStorage に記憶すると、翌日に開いた人には残り時間が減った状態で出てしまい、
-       「3日間限定」の訴求が弱くなる。毎回この瞬間から72時間とする。 */
-    var dl = Date.now() + hours*3600*1000;
-    try{ localStorage.removeItem('lp_deadline_'+key); }catch(e){}
+    var days = Number(document.body.getAttribute('data-deadline-days'));
+    var dl;
+    if(Number.isFinite(days) && days > 0){
+      var openedAt = Date.now(), storageKey = 'lp_first_visit_'+key;
+      try{
+        var saved = Number(localStorage.getItem(storageKey));
+        if(Number.isFinite(saved) && saved > 0) openedAt = saved;
+        else localStorage.setItem(storageKey, String(openedAt));
+      }catch(e){}
+      var end = new Date(openedAt);
+      end.setDate(end.getDate() + days);
+      end.setHours(24, 0, 0, 0);
+      dl = end.getTime();
+    }else{
+      var hours = parseFloat(document.body.getAttribute('data-deadline-hours')||'72');
+      dl = Date.now() + hours*3600*1000;
+      try{ localStorage.removeItem('lp_deadline_'+key); }catch(e){}
+    }
     var cds = document.querySelectorAll('.cd'), exs = document.querySelectorAll('.cd-expired'), minis = document.querySelectorAll('.cdmini');
     function pad(n){ return (n<10?'0':'')+n; }
     function tick(){
